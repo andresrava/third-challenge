@@ -3,8 +3,6 @@ const eventController = require('./../controllers/eventController');
 
 const router = express.Router();
 
-// router.param('id', tourController.checkID);
-
 router
   .route('/')
   .get(eventController.getAllEvents)
@@ -13,7 +11,6 @@ router
 router
   .route('/:id')
   .get(eventController.getEvent)
-//   .patch(eventController.updateEvent)
-//   .delete(eventController.deleteEvent);
+  .delete(eventController.deleteEvent);
 
 module.exports = router;
