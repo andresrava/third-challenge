@@ -31,12 +31,12 @@ exports.getAllEvents = async (req, res) => {
         .limitFields()
         .paginate();
       
-      // const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
+      const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
       
       const events = await features.query;
-      // console.log("Los eventos son: ");
-      // console.log(events);
-      // console.log(dayOfTheWeek);
+      console.log("Los eventos son: ");
+      console.log(events);
+      console.log(dayOfTheWeek);
     // if (dayOfTheWeek) {
     //     //Filtro los eventos
     //     console.log("Entré al if");
