@@ -13,4 +13,8 @@ router
   .get(eventController.getEvent)
   .delete(eventController.deleteEvent);
 
+// router
+//   .route('/:dayOfTheWeek')
+//   .get(eventController.)
+
 module.exports = router;

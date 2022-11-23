@@ -4,20 +4,12 @@ const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
 const slugify = require('slugify');
 
-// Función para sacar el día de la semana
-
-const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
-  
-const day = (dateEvent) => {
-  console.log("el dateEvent es: " + dateEvent)
-  return days[ dateEvent.getDay() ]; 
-}
-
+// Función para filtrar la lista
 const filterByDay = (events, day) => {
   console.log("Entré a la función");
   console.log(events);
   console.log(day);
-  const filtredEvents = new [Event];
+  const filtredEvents = new[Event];
   console.log("creé el array");
   console.log("Entré a FilterByDay! ")
   for (let event of events) {
@@ -28,25 +20,30 @@ const filterByDay = (events, day) => {
   return filtredEvents;
 }
 
+
+
 exports.getAllEvents = async (req, res) => {
     try {
-      console.log(req.query);
-      const llave = slugify(req.query.dayOfTheWeek, { lower: true });
-      console.log(llave);
-      
       // EXECUTE QUERY
       const features = new APIFeatures(Event.find(), req.query)
         .filter()
         .sort()
         .limitFields()
         .paginate();
+      
+      // const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
+      
       const events = await features.query;
-      if (days.includes(llave) && llave){
-        console.log("Entré al if!...");
-        events = filterByDay(events, llave);
-        console.log("Después...")
-      }
+      // console.log("Los eventos son: ");
+      // console.log(events);
+      // console.log(dayOfTheWeek);
+    // if (dayOfTheWeek) {
+    //     //Filtro los eventos
+    //     console.log("Entré al if");
+    //     events = filterByDay(events, dayOfTheWeek);
 
+    //   }  
+      // console.log("Pasé el if");
       // SEND RESPONSE
       res.status(200).json({
         status: 'success',
@@ -122,12 +119,12 @@ exports.getAllEvents = async (req, res) => {
     });
   });
 
-  exports.getEventByDow = catchAsync(async (req, res, next) => {
-    const day = req.params.dow;
-    console.log("the day is: " + day);
-    res.status(204).json({
-    status: 'success',
-    data: day
-  });
-  })
+  // exports.getEventByDow = catchAsync(async (req, res, next) => {
+  //   const day = req.params.dow;
+  //   console.log("the day is: " + day);
+  //   res.status(204).json({
+  //   status: 'success',
+  //   data: day
+  // });
+  // })
   
