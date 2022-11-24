@@ -9,14 +9,16 @@ const filterByDay = (events, day) => {
   console.log("Entré a la función");
   console.log(events);
   console.log(day);
-  const filtredEvents = new[Event];
+  const filtredEvents = [];
+  console.log(filtredEvents)
   console.log("creé el array");
-  console.log("Entré a FilterByDay! ")
   for (let event of events) {
     console.log("Evento: " + event)
+    console.log("dateTime: " + event.dateTime.day)
     if (event.dateTime.day === day)
       filtredEvents.push(event);
   }
+  console.log(filtredEvents)
   return filtredEvents;
 }
 
@@ -37,13 +39,13 @@ exports.getAllEvents = async (req, res) => {
       console.log("Los eventos son: ");
       console.log(events);
       console.log(dayOfTheWeek);
-    // if (dayOfTheWeek) {
-    //     //Filtro los eventos
-    //     console.log("Entré al if");
-    //     events = filterByDay(events, dayOfTheWeek);
+    if (dayOfTheWeek) {
+        //Filtro los eventos
+        console.log("Entré al if");
+        events = filterByDay(events, dayOfTheWeek);
 
-    //   }  
-      // console.log("Pasé el if");
+      }  
+      console.log("Pasé el if");
       // SEND RESPONSE
       res.status(200).json({
         status: 'success',
