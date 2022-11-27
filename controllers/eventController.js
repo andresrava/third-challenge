@@ -14,24 +14,6 @@ const day = (date) => {
 }
 
 
-// Función para filtrar la lista
-const filterByDay = (events, day) => {
-  console.log("Entré a la función");
-  console.log(events);
-  console.log(day);
-  const filtredEvents = [];
-  console.log(filtredEvents)
-  console.log("creé el array");
-  for (let event of events) {
-    console.log("Evento: " + event)
-    console.log("dateTime: " + event.dateTime.getDay());
-    if (event.dateTime.day === days)
-      filtredEvents.push(event);
-  }
-  console.log(filtredEvents)
-  return filtredEvents;
-}
-
 
 
 exports.getAllEvents = async (req, res) => {
@@ -42,21 +24,13 @@ exports.getAllEvents = async (req, res) => {
         .sort()
         .limitFields()
         .paginate();
-      
-      
       const events = await features.query;
-      console.log("Los eventos son: ");
-      console.log(events);
-      console.log("El coso es: " + req.query.dayOfTheWeek)
+
+      // Case hit on: /event?dayOfTheWeek=...
       if (req.query.dayOfTheWeek){
         const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
-        console.log(dayOfTheWeek);
-          //Filtro los eventos
-          console.log("Entré al if");
           const numberDay = days.indexOf(dayOfTheWeek);
-          console.log(events[0].dateTime);
           const filtredEvents = events.filter(event => (event.dateTime.getDay() === numberDay));
-          console.log("Filtred Elements: " + filtredEvents);
           res.status(200).json({
             status: 'success',
             results:filtredEvents.length,
@@ -64,8 +38,17 @@ exports.getAllEvents = async (req, res) => {
               filtredEvents
             }
           }); 
+        } 
+        // Case hit on: /event?id=...
+        else if (req.query.id){
+          const event = await Event.findById(req.query.id);
+          res.status(200).json({
+            status: 'success',
+            data: {
+              event
+            }
+            }); 
         } else {
-      console.log("Pasé el if");
         // SEND RESPONSE
       res.status(200).json({
         status: 'success',
