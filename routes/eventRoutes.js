@@ -6,15 +6,13 @@ const router = express.Router();
 router
   .route('/')
   .get(eventController.getAllEvents)
-  .post(eventController.createEvent);
+  .post(eventController.createEvent)
+  .delete(eventController.deleteEvent);
 
 router
   .route('/:id')
   .get(eventController.getEvent)
   .delete(eventController.deleteEvent);
 
-// router
-//   .route('/:dayOfTheWeek')
-//   .get(eventController.)
 
 module.exports = router;

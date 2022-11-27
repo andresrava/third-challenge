@@ -39,3 +39,9 @@ send GET request to (for example): "3000/api/v1/events?dayOfTheWeek=thursday"
 
 \*\*\*For get event by ID:
 send GET request to (for example) : "3000/api/v1/events?id=6373b3781671ce43e6430b46"
+
+\_\*\* For delete event by ID:
+send DELETE request to (for example): "3000/api/v1/events?id=6373b3c77667ad46a27fcde4"
+
+\_\*\* For delete events by day of the week:
+send DELETE request to (for example): "3000/api/v1/events?id=6373b3c77667ad46a27fcde4"

@@ -84,23 +84,6 @@ exports.getAllEvents = async (req, res) => {
     }
   };  
 
-  // exports.getEvent = async (req, res) => {
-  //   try {
-  //     const event = await Event.findById(req.params.id);
-  
-  //     res.status(200).json({
-  //       status: 'success',
-  //       data: {
-  //         event
-  //       }
-  //     });
-  //   } catch (err) {
-  //     res.status(404).json({
-  //       status: 'fail',
-  //       message: err
-  //     });
-  //   }
-  // };
   exports.getEvent = catchAsync(async (req, res) => {
       const event = await Event.findById(req.params.id);
   
@@ -112,11 +95,39 @@ exports.getAllEvents = async (req, res) => {
       });
   });
 
-  exports.deleteEvent = catchAsync(async (req, res, next) => {
-    const event = await Event.findByIdAndDelete(req.params.id);
+  // exports.deleteEvent = catchAsync(async (req, res, next) => {
+  //   const event = await Event.findByIdAndDelete(req.params.id);
   
-    if (!event) {
-      return next(new AppError('No event found with that ID', 404));
+  //   if (!event) {
+  //     return next(new AppError('No event found with that ID', 404));
+  //   }
+  
+  //   res.status(204).json({
+  //     status: 'success',
+  //     data: null
+  //   });
+  // });
+
+  exports.deleteEvent = catchAsync(async (req, res, next) => {
+    if (req.query.dayOfTheWeek){
+      const features = new APIFeatures(Event.find(), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate();
+      const events = await features.query;
+      const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
+      const numberDay = days.indexOf(dayOfTheWeek);
+      const filtredEvents = events.filter(event => (event.dateTime.getDay() === numberDay));
+      for (let event of filtredEvents) {
+        await Event.findByIdAndDelete(event.id);
+      }
+    }
+    if (req.query.id){
+      const event = await Event.findByIdAndDelete(req.query.id);
+      if (!event) {
+            return next(new AppError('No event found with that ID', 404));
+          }
     }
   
     res.status(204).json({
@@ -124,13 +135,3 @@ exports.getAllEvents = async (req, res) => {
       data: null
     });
   });
-
-  // exports.getEventByDow = catchAsync(async (req, res, next) => {
-  //   const day = req.params.dow;
-  //   console.log("the day is: " + day);
-  //   res.status(204).json({
-  //   status: 'success',
-  //   data: day
-  // });
-  // })
-  
