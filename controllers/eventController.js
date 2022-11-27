@@ -4,6 +4,16 @@ const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
 const slugify = require('slugify');
 
+// Función para sacar el día de la semana
+
+const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  
+const day = (date) => {
+  console.log("el dateEvent es: " + dateEvent)
+  return days[ date.getDay() ]; 
+}
+
+
 // Función para filtrar la lista
 const filterByDay = (events, day) => {
   console.log("Entré a la función");
@@ -14,8 +24,8 @@ const filterByDay = (events, day) => {
   console.log("creé el array");
   for (let event of events) {
     console.log("Evento: " + event)
-    console.log("dateTime: " + event.dateTime.day)
-    if (event.dateTime.day === day)
+    console.log("dateTime: " + event.dateTime.getDay());
+    if (event.dateTime.day === days)
       filtredEvents.push(event);
   }
   console.log(filtredEvents)
@@ -33,20 +43,30 @@ exports.getAllEvents = async (req, res) => {
         .limitFields()
         .paginate();
       
-      const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
       
       const events = await features.query;
       console.log("Los eventos son: ");
       console.log(events);
-      console.log(dayOfTheWeek);
-    if (dayOfTheWeek) {
-        //Filtro los eventos
-        console.log("Entré al if");
-        events = filterByDay(events, dayOfTheWeek);
-
-      }  
+      console.log("El coso es: " + req.query.dayOfTheWeek)
+      if (req.query.dayOfTheWeek){
+        const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
+        console.log(dayOfTheWeek);
+          //Filtro los eventos
+          console.log("Entré al if");
+          const numberDay = days.indexOf(dayOfTheWeek);
+          console.log(events[0].dateTime);
+          const filtredEvents = events.filter(event => (event.dateTime.getDay() === numberDay));
+          console.log("Filtred Elements: " + filtredEvents);
+          res.status(200).json({
+            status: 'success',
+            results:filtredEvents.length,
+            data: {
+              filtredEvents
+            }
+          }); 
+        } else {
       console.log("Pasé el if");
-      // SEND RESPONSE
+        // SEND RESPONSE
       res.status(200).json({
         status: 'success',
         results:events.length,
@@ -54,6 +74,7 @@ exports.getAllEvents = async (req, res) => {
           events
         }
       });
+    }
     } catch (err) {
       res.status(404).json({
         status: 'fail',

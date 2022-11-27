@@ -18,14 +18,6 @@ const eventSchema = new mongoose.Schema(
     }
   }
 );
-// Función para sacar el día de la semana
-
-const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
-  
-const day = () => {
-  console.log("el dateEvent es: " + dateEvent)
-  return days[ this.dateTime.getDay() ]; 
-}
 
 
 
