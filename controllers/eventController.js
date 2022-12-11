@@ -25,12 +25,15 @@ exports.getAllEvents = async (req, res) => {
         .limitFields()
         .paginate();
       const events = await features.query;
-
+      console.log("Los eventos acá serían: " + events);    
       // Case hit on: /event?dayOfTheWeek=...
       if (req.query.dayOfTheWeek){
         const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
           const numberDay = days.indexOf(dayOfTheWeek);
-          const filtredEvents = events.filter(event => (event.dateTime.getDay() === numberDay));
+          console.log("el number day es: " + numberDay);
+          console.log("Los eventos serían: " + events);
+          const filtredEvents = events
+            .filter(event => (event.dateTime.getDay() === numberDay));
           res.status(200).json({
             status: 'success',
             results:filtredEvents.length,
@@ -50,6 +53,8 @@ exports.getAllEvents = async (req, res) => {
             }); 
         } else {
         // SEND RESPONSE
+        const events = await features.query;
+      console.log("Los eventos son: ", events);
       res.status(200).json({
         status: 'success',
         results:events.length,
