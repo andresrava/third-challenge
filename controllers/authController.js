@@ -5,6 +5,7 @@ const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const sendEmail = require('./../utils/email');
+const { appendFile } = require('fs');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -22,14 +23,18 @@ const createSendToken = (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  res.cookie('jwt', token, cookieOptions);
+  //res.cookie('jwt', token, cookieOptions);
 
   // Remove password from output
   user.password = undefined;
 
+  console.log("Coso: " + JSON.res);
+
+  //res.headers.append('token', token);
+
   res.status(statusCode).json({
     status: 'success',
-    token,
+    //token,
     data: {
       user
     }
