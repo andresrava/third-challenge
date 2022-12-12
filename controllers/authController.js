@@ -28,8 +28,6 @@ const createSendToken = (user, statusCode, res) => {
   // Remove password from output
   user.password = undefined;
 
-  console.log("Coso: " + JSON.res);
-
   //res.headers.append('token', token);
 
   res.status(statusCode).json({
