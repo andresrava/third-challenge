@@ -1,4 +1,4 @@
-# second_challenge
+# third_challenge
 
 Api for mannaging scheduled events and users
 
