@@ -28,15 +28,15 @@ const createSendToken = (user, statusCode, res) => {
   // Remove password from output
   user.password = undefined;
 
-  //res.headers.append('token', token);
-
-  res.status(statusCode).json({
+  res
+  .status(statusCode).set('Authorization', `Bearer ${token}`).json({
     status: 'success',
     //token,
     data: {
       user
     }
-  });
+  })
+  ;
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
