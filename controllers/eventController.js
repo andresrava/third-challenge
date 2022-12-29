@@ -18,6 +18,7 @@ const day = (date) => {
 
 exports.getAllEvents = async (req, res) => {
     try {
+      console.log("Now I'm here...");
       // EXECUTE QUERY
       const features = new APIFeatures(Event.find(), req.query)
         .filter()
@@ -25,13 +26,9 @@ exports.getAllEvents = async (req, res) => {
         .limitFields()
         .paginate();
       const events = await features.query;
-      // console.log("Los eventos acá serían: " + events);    
-      // Case hit on: /event?dayOfTheWeek=...
       if (req.query.dayOfTheWeek){
         const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
           const numberDay = days.indexOf(dayOfTheWeek);
-          // console.log("el number day es: " + numberDay);
-          // console.log("Los eventos serían: " + events);
           const filtredEvents = events
             .filter(event => (event.dateTime.getDay() === numberDay));
           res.status(200).json({
@@ -42,7 +39,6 @@ exports.getAllEvents = async (req, res) => {
             }
           }); 
         } 
-        // Case hit on: /event?id=...
         else if (req.query.id){
           const event = await Event.findById(req.query.id);
           res.status(200).json({
@@ -53,9 +49,9 @@ exports.getAllEvents = async (req, res) => {
             }); 
         } else {
         // SEND RESPONSE
+        console.log("Now I'm there...");
         const events = await features.query;
-      // console.log("Los eventos son: ", events);
-      res.status(200).json({
+        res.status(200).json({
         status: 'success',
         results:events.length,
         data: {
@@ -64,6 +60,7 @@ exports.getAllEvents = async (req, res) => {
       });
     }
     } catch (err) {
+      console.log(err);
       res.status(404).json({
         status: 'fail',
         message: err
@@ -82,6 +79,7 @@ exports.getAllEvents = async (req, res) => {
         }
       });
     } catch (err) {
+      console.log(err);
       res.status(400).json({
         status: 'fail',
         message: err
@@ -90,14 +88,21 @@ exports.getAllEvents = async (req, res) => {
   };  
 
   exports.getEvent = catchAsync(async (req, res) => {
+    try {
       const event = await Event.findById(req.params.id);
   
       res.status(200).json({
         status: 'success',
         data: {
           event
-        }
+        }})
+      } catch (err) {
+        console.log(err);
+        res.status(400).json({
+          status: 'fail',
+          message: err
       });
+      }
   });
 
   // exports.deleteEvent = catchAsync(async (req, res, next) => {
