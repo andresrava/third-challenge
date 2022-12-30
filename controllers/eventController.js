@@ -17,6 +17,7 @@ const day = (date) => {
 
 
 exports.getAllEvents = async (req, res) => {
+  console.log("Entré al getAllEvents");
     try {
       console.log("Now I'm here...");
       // EXECUTE QUERY
@@ -25,8 +26,12 @@ exports.getAllEvents = async (req, res) => {
         .sort()
         .limitFields()
         .paginate();
+      console.log("Now I'm here too...");
+      console.log(features.query.json);
       const events = await features.query;
+      console.log("Now I'm here also...");
       if (req.query.dayOfTheWeek){
+        console.log("Entré al if de DayOfTheWeek");
         const dayOfTheWeek = slugify(req.query.dayOfTheWeek, { lower: true });
           const numberDay = days.indexOf(dayOfTheWeek);
           const filtredEvents = events
@@ -49,6 +54,7 @@ exports.getAllEvents = async (req, res) => {
             }); 
         } else {
         // SEND RESPONSE
+        console.log("Entré al else");
         console.log("Now I'm there...");
         const events = await features.query;
         res.status(200).json({
@@ -60,6 +66,7 @@ exports.getAllEvents = async (req, res) => {
       });
     }
     } catch (err) {
+      console.log("Entré al error");
       console.log(err);
       res.status(404).json({
         status: 'fail',
