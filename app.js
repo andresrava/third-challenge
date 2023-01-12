@@ -5,6 +5,8 @@ const compression = require("compression");
 const eventRouter = require("./routes/eventRoutes");
 const userRouter = require("./routes/userRoutes");
 const app = express();
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 dotenv.config({ path: "./config.env" });
 
